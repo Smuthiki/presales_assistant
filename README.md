@@ -47,10 +47,20 @@ An intelligent presales automation tool that revolutionizes how sales teams crea
 
 ## 📦 Installation
 
+> **🚀 NEW USERS**: For the easiest setup, see [QUICKSTART-NEW-USERS.md](QUICKSTART-NEW-USERS.md) or just double-click `⚡ ONE-CLICK SETUP.bat`!
+
 ### Prerequisites
 - Python 3.11 or higher
 - Node.js 16 or higher
 - OpenAI API Key
+
+### One-Click Setup (Recommended)
+1. **Double-click** `⚡ ONE-CLICK SETUP.bat`
+2. **Add your OpenAI API key** to the `.env` file
+3. **Double-click** `🚀 Launch Presales Assistant.bat`
+4. **Open** http://localhost:3000
+
+### Manual Setup
 
 ### Backend Setup
 
