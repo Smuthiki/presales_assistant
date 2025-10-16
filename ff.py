@@ -25,6 +25,10 @@ import time
 import io
 import base64
 from datetime import datetime
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Free search alternatives
 try:
@@ -44,11 +48,12 @@ except ImportError:
     GOOGLE_SEARCH_AVAILABLE = False
 
 # ===================== CONFIG =====================
-PORTFOLIO_XLSX = Path(r"C:\Users\smuthiki\Downloads\test\Project_Portfolio_Data.xlsx")
-# OPENAI_API_KEY = "sk-proj-RO0FdFw2DE8RRRleVc3xT3BlbkFJcXmjp9otOsmlOYYkZJOa"
-OPENAI_API_KEY = ""
-OPENAI_MODEL = ""
-SERPAPI_API_KEY = ""
+PORTFOLIO_XLSX = Path(r"C:\Users\smuthiki\Downloads\presales_assistant\Project_Portfolio_Data.xlsx")
+
+# Load configuration from environment variables
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4")
+SERPAPI_API_KEY = os.getenv("SERPAPI_API_KEY", "")
 
 # Search Engine Configuration - Intelligent Multi-Engine Strategy
 # Options: "serpapi", "duckduckgo", "google", "intelligent_mixed"

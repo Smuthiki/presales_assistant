@@ -249,7 +249,6 @@ Thumbs.db
 ui.py
 test_env/
 portfolio_embeddings_cache.json
-*.bat
 
 # Sensitive Configuration
 config/secrets.json

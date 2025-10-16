@@ -1,0 +1,40 @@
+{
+  "name": "presales-assistant",
+  "version": "1.0.0",
+  "description": "AI-Powered Presales Assistant - Cross-platform automation",
+  "scripts": {
+    "setup": "python setup.py",
+    "start": "python run.py start",
+    "stop": "python run.py stop",
+    "restart": "python run.py restart",
+    "status": "python run.py status",
+    "diagnose": "python run.py diagnose",
+    "dev": "python run.py start",
+    "backend": "python ff.py",
+    "frontend": "cd presales-assistant-ui && npm start",
+    "install-all": "python setup.py",
+    "update": "pip install --upgrade -r requirements.txt && cd presales-assistant-ui && npm update",
+    "clean": "python run.py stop && cd presales-assistant-ui && rm -rf node_modules && npm install"
+  },
+  "keywords": [
+    "presales",
+    "ai",
+    "automation",
+    "fastapi",
+    "react",
+    "openai"
+  ],
+  "author": "Presales Assistant Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0",
+    "python": ">=3.11.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Smuthiki/presales_assistant.git"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

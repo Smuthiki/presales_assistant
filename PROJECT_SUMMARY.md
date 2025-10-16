@@ -1,7 +1,7 @@
 # 📋 Project Summary - AI-Powered Presales Assistant
 
 ## 🎯 **Project Overview**
-Complete AI-powered presales automation tool with intelligent portfolio matching, multi-engine web search, and GPT-4 pitch generation.
+Complete AI-powered presales automation tool with intelligent portfolio matching, multi-engine web search, and GPT-4 pitch generation. Features cross-platform automation system for easy setup and deployment.
 
 ## 📂 **Repository Structure**
 
@@ -19,15 +19,20 @@ presales_assistant/
 │       ├── package.json               # Node.js dependencies
 │       └── public/                    # Static assets
 │
+├── 🚀 Cross-Platform Automation
+│   ├── setup.py                       # Complete setup automation (any OS)
+│   ├── run.py                         # Application management (start/stop/diagnose)
+│   └── package.json                   # NPM scripts integration
+│
 ├── 📚 Documentation
 │   ├── README.md                      # Comprehensive project documentation (8KB)
-│   ├── QUICKSTART.md                  # Fast setup guide (3KB)  
+│   ├── AUTOMATION_README.md           # Cross-platform automation guide
 │   └── CONTRIBUTING.md                # Developer guidelines (6KB)
 │
 ├── ⚙️ Configuration
 │   ├── .env.example                   # Environment template
-│   ├── .gitignore                     # Git exclusions (5KB)
-│   └── setup_project.bat              # Automated setup script
+│   ├── .env                          # Environment variables (gitignored)
+│   └── .gitignore                     # Git exclusions (5KB)
 │
 └── 🔧 Development Tools
     └── setup_git.bat                  # Git initialization helper
@@ -59,6 +64,14 @@ presales_assistant/
 - ✅ Unicode-safe Windows console output
 - ✅ Robust caching and performance optimization
 - ✅ Environment-based configuration management
+
+### 🚀 **Cross-Platform Automation**
+- ✅ Python-based setup and management scripts
+- ✅ Works on Windows, macOS, and Linux
+- ✅ NPM scripts integration for alternative workflows
+- ✅ Intelligent process management and port detection
+- ✅ Comprehensive system diagnostics and health checks
+- ✅ One-command setup and deployment
 
 ## 📊 **Technology Stack**
 

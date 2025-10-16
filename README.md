@@ -88,17 +88,57 @@ npm install
 
 ## 🚀 Running the Application
 
-### Start Backend Server (Terminal 1)
+### 🎯 Quick Start (Cross-Platform)
+
+**First Time Setup:**
 ```bash
+# One-command setup (works on Windows, macOS, Linux)
+python setup.py
+
+# Add your API keys to .env file
+# Start the application  
+python run.py start
+```
+
+**Daily Usage:**
+```bash
+# Start application
+python run.py start
+
+# Stop application  
+python run.py stop
+```
+
+> 💡 **New Cross-Platform Automation**: We've replaced Windows-only batch files with Python scripts that work on all operating systems! See [AUTOMATION_README.md](AUTOMATION_README.md) for details.
+
+### Alternative Methods
+
+**Using NPM Scripts:**
+```bash
+npm run setup     # Setup everything
+npm start         # Start application
+npm stop          # Stop application
+```
+
+**Manual Setup (Advanced):**
+
+### Backend Setup
+```bash
+# Install Python dependencies
+pip install -r requirements.txt
+
 # Start FastAPI server
 python ff.py
 ```
 The backend server will run on `http://localhost:8000`
 
-### Start Frontend Application (Terminal 2)
+### Frontend Setup  
 ```bash
 # Navigate to frontend directory
 cd presales-assistant-ui
+
+# Install Node.js dependencies
+npm install
 
 # Start React development server
 npm start
