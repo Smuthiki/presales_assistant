@@ -331,6 +331,57 @@ def repair_frontend():
             print_colored("npm not found!", Colors.FAIL)
             return False
         
+        # Check for Material-UI corruption by looking for common signs
+        mui_corrupted = False
+        try:
+            result = subprocess.run([npm_path, "list", "@mui/material"], 
+                                  capture_output=True, text=True, check=False)
+            if result.returncode != 0 or "ENOENT" in result.stderr:
+                mui_corrupted = True
+        except:
+            mui_corrupted = True
+        
+        # If Material-UI appears corrupted, do a clean reinstall
+        if mui_corrupted:
+            print_colored("Material-UI corruption detected. Performing clean reinstall...", Colors.WARNING)
+            
+            # Remove Material-UI packages
+            mui_packages = ["@mui/material", "@mui/icons-material", "@emotion/react", "@emotion/styled"]
+            for pkg in mui_packages:
+                try:
+                    subprocess.run([npm_path, "uninstall", pkg], 
+                                 capture_output=True, text=True, check=False)
+                    print_colored(f"✓ Removed {pkg}", Colors.OKGREEN)
+                except:
+                    pass
+            
+            # Check if complete clean install is needed
+            node_modules = Path("node_modules")
+            if node_modules.exists() and any("ENOENT" in str(e) for e in []):
+                print_colored("Performing complete clean install...", Colors.WARNING)
+                try:
+                    import shutil
+                    if node_modules.exists():
+                        shutil.rmtree(node_modules)
+                    
+                    package_lock = Path("package-lock.json")
+                    if package_lock.exists():
+                        package_lock.unlink()
+                    
+                    print_colored("✓ Cleaned node_modules and package-lock.json", Colors.OKGREEN)
+                    
+                    # Reinstall all dependencies
+                    print_colored("Reinstalling all dependencies...", Colors.OKCYAN)
+                    result = subprocess.run([npm_path, "install"], 
+                                          capture_output=True, text=True, check=False)
+                    if result.returncode == 0:
+                        print_colored("✓ Complete reinstall successful", Colors.OKGREEN)
+                    else:
+                        print_colored("⚠ Reinstall had issues but continuing...", Colors.WARNING)
+                        
+                except Exception as e:
+                    print_colored(f"⚠ Clean install error: {e}", Colors.WARNING)
+        
         print_colored("Installing/repairing critical dependencies...", Colors.OKCYAN)
         critical_deps = [
             # CSS and PostCSS (most common issue)
@@ -377,7 +428,7 @@ def repair_frontend():
         except:
             print_colored("⚠ Could not run security audit", Colors.WARNING)
         
-        # Verify critical packages
+        # Verify critical packages and detect corruption
         print_colored("Verifying critical packages...", Colors.OKCYAN)
         verification_packages = [
             "@csstools/normalize.css",
@@ -387,16 +438,46 @@ def repair_frontend():
             "axios"
         ]
         
+        corruption_detected = False
         for pkg in verification_packages:
             try:
                 result = subprocess.run([npm_path, "list", pkg], 
                                       capture_output=True, text=True, check=False)
-                if result.returncode == 0:
+                if result.returncode == 0 and "ENOENT" not in result.stderr:
                     print_colored(f"✓ {pkg} verified", Colors.OKGREEN)
                 else:
                     print_colored(f"⚠ {pkg} may need attention", Colors.WARNING)
+                    if "ENOENT" in result.stderr or "missing" in result.stderr.lower():
+                        corruption_detected = True
             except:
                 print_colored(f"⚠ Could not verify {pkg}", Colors.WARNING)
+        
+        # Special check for Material-UI ESM files
+        mui_esm_check = Path("node_modules/@mui/material/esm")
+        if mui_esm_check.exists():
+            # Check for common missing files that cause compilation errors
+            critical_files = [
+                "node_modules/@mui/material/esm/Paper/index.js",
+                "node_modules/@mui/material/esm/ButtonBase/index.js", 
+                "node_modules/@mui/material/esm/CircularProgress/index.js"
+            ]
+            
+            missing_files = []
+            for file_path in critical_files:
+                if not Path(file_path).exists():
+                    missing_files.append(file_path)
+            
+            if missing_files:
+                print_colored("⚠ Material-UI ESM files corruption detected!", Colors.WARNING)
+                print_colored("Run 'python run.py repair' again or do a manual clean install", Colors.WARNING)
+                corruption_detected = True
+            else:
+                print_colored("✓ Material-UI ESM files verified", Colors.OKGREEN)
+        
+        if corruption_detected:
+            print_colored("\n⚠ Package corruption detected! If issues persist:", Colors.WARNING)
+            print_colored("1. Run: python run.py repair", Colors.WARNING)
+            print_colored("2. Or manually: cd presales-assistant-ui && npm run clean && npm install", Colors.WARNING)
         
         return True
     finally:

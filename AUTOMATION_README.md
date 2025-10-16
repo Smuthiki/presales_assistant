@@ -1,6 +1,6 @@
-# 🚀 Cross-Platform Automation System
+# 🚀 AI-Powered Presales Assistant - Complete Guide
 
-This project now includes a powerful, cross-platform automation system that works on **Windows**, **macOS**, and **Linux**.
+This is a comprehensive AI-powered presales automation tool with intelligent portfolio matching, multi-engine web search, and GPT-4 pitch generation. It includes a powerful, cross-platform automation system that works on **Windows**, **macOS**, and **Linux**.
 
 ## 🎯 Quick Start (Any Operating System)
 
@@ -183,6 +183,21 @@ Add to `package.json`:
 
 ### Common Issues & Solutions
 
+**Material-UI Compilation Errors (Missing ESM Files)**
+```bash
+# ERROR: Module build failed - ENOENT: no such file or directory
+# ERROR: export 'default' was not found in '../ButtonBase/index.js'
+# SOLUTION: Clean reinstall of Material-UI packages
+python run.py repair      # First try the repair command
+# If repair doesn't work, do a complete clean install:
+cd presales-assistant-ui
+Remove-Item -Recurse -Force node_modules  # Windows
+rm -rf node_modules                       # macOS/Linux
+npm install                              # Reinstall everything
+cd ..
+python run.py start                      # Restart application
+```
+
 **Frontend CSS/PostCSS Errors**
 ```bash
 python run.py repair      # Fix missing CSS dependencies
@@ -257,7 +272,6 @@ The system automatically ensures these key dependencies are installed:
 ### Dependency Files
 - `requirements.txt` - Python backend dependencies
 - `presales-assistant-ui/package.json` - Frontend dependencies
-- `presales-assistant-ui/package-requirements.txt` - Reference list
 
 ## 🚀 Deployment Ready
 

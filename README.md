@@ -1,12 +1,11 @@
 # 🚀 AI-Powered Presales Assistant
 
-An intelligent presales automation tool that revolutionizes how sales teams create customer pitches by leveraging AI-powered portfolio matching, multi-engine web search, and comprehensive business intelligence extraction.
+An intelligent presales automation tool that leverages AI-powered portfolio matching, multi-engine web search, and GPT-4 pitch generation to revolutionize how sales teams create customer pitches.
 
 ![Python](https://img.shields.io/badge/python-v3.11+-blue.svg)
 ![React](https://img.shields.io/badge/react-v18+-blue.svg)
 ![FastAPI](https://img.shields.io/badge/FastAPI-latest-green.svg)
 ![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-orange.svg)
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 ## ✨ Features
 
@@ -45,20 +44,23 @@ An intelligent presales automation tool that revolutionizes how sales teams crea
 - **Axios** - HTTP client for API communication
 - **React Markdown** - Markdown rendering for rich text display
 
-## 📦 Installation
+## 📦 Quick Start
 
-> **🚀 NEW USERS**: For the easiest setup, see [QUICKSTART-NEW-USERS.md](QUICKSTART-NEW-USERS.md) or just double-click `⚡ ONE-CLICK SETUP.bat`!
+> **🚀 NEW USERS**: For detailed step-by-step instructions, see [START_HERE.md](START_HERE.md)
 
 ### Prerequisites
-- Python 3.11 or higher
-- Node.js 16 or higher
+- Python 3.11+
+- Node.js 16+
 - OpenAI API Key
 
-### One-Click Setup (Recommended)
-1. **Double-click** `⚡ ONE-CLICK SETUP.bat`
-2. **Add your OpenAI API key** to the `.env` file
-3. **Double-click** `🚀 Launch Presales Assistant.bat`
-4. **Open** http://localhost:3000
+### Automated Setup (Recommended)
+```bash
+# One-command setup (works on all platforms)
+python setup.py
+
+# Start the application
+python run.py start
+```
 
 ### Manual Setup
 
@@ -88,28 +90,21 @@ npm install
 
 ## 🚀 Running the Application
 
-### 🎯 Quick Start (Cross-Platform)
+### 🎯 Running the Application
 
-**First Time Setup:**
+**First Time:**
 ```bash
-# One-command setup (works on Windows, macOS, Linux)
-python setup.py
-
-# Add your API keys to .env file
-# Start the application  
-python run.py start
+python setup.py        # Complete setup
+python run.py start     # Start application
 ```
 
 **Daily Usage:**
 ```bash
-# Start application
-python run.py start
-
-# Stop application  
-python run.py stop
+python run.py start     # Start application
+python run.py stop      # Stop application
 ```
 
-> 💡 **New Cross-Platform Automation**: We've replaced Windows-only batch files with Python scripts that work on all operating systems! See [AUTOMATION_README.md](AUTOMATION_README.md) for details.
+> 💡 **Cross-Platform Automation**: Our automation system works on Windows, macOS, and Linux! See [AUTOMATION_README.md](AUTOMATION_README.md) for advanced usage.
 
 ### Alternative Methods
 
