@@ -1,3 +1,4 @@
+# Python Dependencies for AI-Powered Presales Assistant Backend
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
 openai==1.3.8
@@ -16,3 +17,15 @@ httpx==0.25.2
 anyio==4.0.0
 psutil==5.9.6
 openpyxl==3.1.2
+
+# Note: Frontend (Node.js) dependencies are managed in:
+# - presales-assistant-ui/package.json (main dependencies)
+# - presales-assistant-ui/package-requirements.txt (reference list)
+# 
+# Key frontend dependencies include:
+# - @csstools/normalize.css (CSS normalization)
+# - postcss-normalize (PostCSS plugin)
+# - @mui/material + @mui/icons-material (Material-UI)
+# - axios (HTTP client)
+# - react-markdown (Markdown rendering)
+# - jspdf + html2canvas (PDF generation)

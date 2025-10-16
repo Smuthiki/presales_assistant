@@ -22,6 +22,126 @@ class Colors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
 
+def find_executable(name):
+    """Find executable in PATH or common locations dynamically"""
+    # First try to find in PATH
+    try:
+        if platform.system() == "Windows":
+            result = subprocess.run(["where", name], capture_output=True, text=True, check=True)
+        else:
+            result = subprocess.run(["which", name], capture_output=True, text=True, check=True)
+        
+        # On Windows, prefer .cmd files
+        paths = result.stdout.strip().split('\n')
+        if platform.system() == "Windows":
+            cmd_paths = [p for p in paths if p.endswith('.cmd')]
+            if cmd_paths:
+                return cmd_paths[0]
+        return paths[0]
+    except:
+        pass
+    
+    # If not found in PATH, try to find node first and derive npm location
+    if name == "npm":
+        node_path = find_executable("node")
+        if node_path:
+            node_dir = os.path.dirname(node_path)
+            # On Windows, prioritize .cmd files
+            if platform.system() == "Windows":
+                potential_npm_paths = [
+                    os.path.join(node_dir, "npm.cmd"),
+                    os.path.join(node_dir, "npm.exe"),
+                    os.path.join(node_dir, "npm"),
+                ]
+            else:
+                potential_npm_paths = [
+                    os.path.join(node_dir, "npm"),
+                    os.path.join(node_dir, "npm.cmd"),
+                    os.path.join(node_dir, "npm.exe"),
+                ]
+            
+            for npm_path in potential_npm_paths:
+                if os.path.exists(npm_path):
+                    try:
+                        subprocess.run([npm_path, "--version"], capture_output=True, text=True, check=True)
+                        return npm_path
+                    except:
+                        continue
+    
+    # Last resort: try common installation directories
+    if platform.system() == "Windows":
+        common_paths = [
+            os.path.expandvars(r"%PROGRAMFILES%\nodejs"),
+            os.path.expandvars(r"%PROGRAMFILES(X86)%\nodejs"),
+            os.path.expandvars(r"%APPDATA%\npm"),
+            os.path.expandvars(r"%USERPROFILE%\AppData\Roaming\npm"),
+        ]
+        
+        for base_path in common_paths:
+            if os.path.exists(base_path):
+                # Prioritize .cmd files on Windows
+                potential_paths = [
+                    os.path.join(base_path, f"{name}.cmd"),
+                    os.path.join(base_path, f"{name}.exe"),
+                    os.path.join(base_path, name),
+                ]
+                
+                for path in potential_paths:
+                    if os.path.exists(path):
+                        try:
+                            subprocess.run([path, "--version"], capture_output=True, text=True, check=True)
+                            return path
+                        except:
+                            continue
+    else:
+        # Unix-like systems
+        common_paths = [
+            "/usr/local/bin",
+            "/usr/bin",
+            "/opt/node/bin",
+            os.path.expanduser("~/.local/bin"),
+            os.path.expanduser("~/node_modules/.bin"),
+        ]
+        
+        for base_path in common_paths:
+            path = os.path.join(base_path, name)
+            if os.path.exists(path):
+                try:
+                    subprocess.run([path, "--version"], capture_output=True, text=True, check=True)
+                    return path
+                except:
+                    continue
+    
+    return None
+
+def run_npm_command(args, description, check=True):
+    """Run npm command with dynamic path detection"""
+    npm_path = find_executable("npm")
+    if not npm_path:
+        print_colored(f"✗ {description} failed - npm not found", Colors.FAIL)
+        return False
+    
+    try:
+        command = [npm_path] + args
+        result = subprocess.run(command, check=check, capture_output=True, text=True)
+        
+        if result.returncode == 0:
+            print_colored(f"✓ {description} completed successfully", Colors.OKGREEN)
+            return True
+        else:
+            print_colored(f"⚠ {description} completed with warnings", Colors.WARNING)
+            if result.stderr:
+                print(f"Warning: {result.stderr}")
+            return False
+    except subprocess.CalledProcessError as e:
+        print_colored(f"✗ {description} failed", Colors.FAIL)
+        print(f"Error: {e}")
+        return False
+    except Exception as e:
+        print_colored(f"✗ {description} failed", Colors.FAIL)
+        print(f"Error: {e}")
+        return False
+
 def print_colored(message, color=Colors.OKGREEN):
     """Print colored message with fallback for Windows"""
     if platform.system() == "Windows":
@@ -79,22 +199,32 @@ def check_prerequisites():
         python_ok = False
     
     # Check Node.js
-    try:
-        node_version = subprocess.run(["node", "--version"], 
-                                    capture_output=True, text=True)
-        print_colored(f"✓ Node.js: {node_version.stdout.strip()}", Colors.OKGREEN)
-        node_ok = True
-    except:
+    node_path = find_executable("node")
+    if node_path:
+        try:
+            node_version = subprocess.run([node_path, "--version"], 
+                                        capture_output=True, text=True)
+            print_colored(f"✓ Node.js: {node_version.stdout.strip()}", Colors.OKGREEN)
+            node_ok = True
+        except:
+            print_colored("✗ Node.js not working", Colors.FAIL)
+            node_ok = False
+    else:
         print_colored("✗ Node.js not found", Colors.FAIL)
         node_ok = False
     
     # Check npm
-    try:
-        npm_version = subprocess.run(["npm", "--version"], 
-                                   capture_output=True, text=True)
-        print_colored(f"✓ npm: {npm_version.stdout.strip()}", Colors.OKGREEN)
-        npm_ok = True
-    except:
+    npm_path = find_executable("npm")
+    if npm_path:
+        try:
+            npm_version = subprocess.run([npm_path, "--version"], 
+                                       capture_output=True, text=True)
+            print_colored(f"✓ npm: {npm_version.stdout.strip()}", Colors.OKGREEN)
+            npm_ok = True
+        except:
+            print_colored("✗ npm not working", Colors.FAIL)
+            npm_ok = False
+    else:
         print_colored("✗ npm not found", Colors.FAIL)
         npm_ok = False
     
@@ -103,7 +233,7 @@ def check_prerequisites():
         if not python_ok:
             print("- Python 3.11+: https://www.python.org/downloads/")
         if not node_ok or not npm_ok:
-            print("- Node.js 16+: https://nodejs.org/")
+            print("- Node.js 16+ (includes npm): https://nodejs.org/")
         return False
     
     return True
@@ -155,16 +285,67 @@ def install_node_dependencies():
         return False
     
     # Change to UI directory and install
+    original_dir = os.getcwd()
     os.chdir(ui_dir)
     
-    success = run_command("npm install", "Installing Node.js packages", check=False)
-    
-    if not success:
-        print_colored("Trying with --force flag...", Colors.WARNING)
-        run_command("npm install --force", "Installing with force", check=False)
-    
-    os.chdir("..")
-    return True
+    try:
+        # First, install main dependencies from package.json
+        success = run_npm_command(["install"], "Installing Node.js packages from package.json", check=False)
+        
+        if not success:
+            print_colored("Trying with --force flag...", Colors.WARNING)
+            success = run_npm_command(["install", "--force"], "Installing with force", check=False)
+        
+        # Install critical dependencies that are commonly missing
+        critical_deps = [
+            # CSS and PostCSS dependencies (most common issues)
+            "@csstools/normalize.css@^12.1.1",
+            "postcss-normalize@^13.0.1",
+            
+            # Core MUI dependencies
+            "@mui/material@^7.3.2",
+            "@mui/icons-material@^7.3.2", 
+            "@emotion/react@^11.14.0",
+            "@emotion/styled@^11.14.1",
+            
+            # Essential utilities
+            "axios@^1.12.2",
+            "react-markdown@^10.1.0",
+            
+            # PDF and canvas utilities
+            "jspdf@^3.0.3",
+            "html2canvas@^1.4.1",
+            
+            # Development utilities
+            "concurrently@^9.2.1"
+        ]
+        
+        print_colored("Ensuring critical dependencies are installed...", Colors.OKCYAN)
+        for dep in critical_deps:
+            run_npm_command(["install", dep], f"Installing {dep.split('@')[0]}", check=False)
+        
+        # Try to fix any audit issues without breaking changes
+        print_colored("Fixing security vulnerabilities...", Colors.OKCYAN)
+        run_npm_command(["audit", "fix"], "Fixing security issues", check=False)
+        
+        # Verify key packages are installed
+        print_colored("Verifying installation...", Colors.OKCYAN)
+        verification_packages = [
+            "@csstools/normalize.css",
+            "postcss-normalize", 
+            "@mui/material",
+            "react-markdown",
+            "axios"
+        ]
+        
+        for pkg in verification_packages:
+            result = run_npm_command(["list", pkg], f"Checking {pkg}", check=False)
+            if not result:
+                print_colored(f"⚠ {pkg} may need manual installation", Colors.WARNING)
+        
+        return success
+    finally:
+        os.chdir(original_dir)
 
 def create_env_file():
     """Create .env file if it doesn't exist"""

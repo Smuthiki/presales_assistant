@@ -45,6 +45,7 @@ python run.py stop           # Stop all servers
 python run.py restart        # Restart application
 python run.py status         # Check application status
 python run.py diagnose       # Run system diagnostics
+python run.py repair         # Repair frontend dependencies
 ```
 
 ### NPM Scripts (Alternative)
@@ -59,6 +60,7 @@ npm stop                    # Same as: python run.py stop
 npm run restart             # Same as: python run.py restart
 npm run status              # Same as: python run.py status
 npm run diagnose            # Same as: python run.py diagnose
+npm run repair              # Same as: python run.py repair
 
 # Development
 npm run backend             # Start only backend server
@@ -73,6 +75,10 @@ npm run clean               # Clean install (removes node_modules)
 - ✅ Checks Python and Node.js installation
 - ✅ Installs all Python packages (FastAPI, OpenAI, pandas, etc.)
 - ✅ Installs all Node.js packages (React, Material-UI, etc.)
+- ✅ Ensures critical dependencies (@csstools/normalize.css, postcss-normalize)
+- ✅ Installs MUI components and icons automatically
+- ✅ Sets up PDF generation tools (jspdf, html2canvas)
+- ✅ Configures HTTP client (axios) and markdown rendering
 - ✅ Creates `.env` file from template
 - ✅ Verifies all installations
 - ✅ Cross-platform colored output
@@ -81,17 +87,30 @@ npm run clean               # Clean install (removes node_modules)
 ### `python run.py start` - Application Launcher
 - ✅ Starts FastAPI backend server (port 8000)
 - ✅ Starts React frontend server (port 3000)
+- ✅ Intelligently detects already-running servers
 - ✅ Opens browser automatically
 - ✅ Creates separate terminal windows on Windows
 - ✅ Background processes on Linux/macOS
 - ✅ Port conflict detection
 - ✅ Process management
+- ✅ Graceful handling of partial startups
 
 ### `python run.py stop` - Clean Shutdown
 - ✅ Terminates all related processes
 - ✅ Frees up ports (8000, 3000)
 - ✅ Works across all operating systems
 - ✅ Safe process termination
+
+### `python run.py repair` - Frontend Repair Tool
+- ✅ Fixes missing CSS dependencies (@csstools/normalize.css, postcss-normalize)
+- ✅ Repairs Material-UI components (@mui/material, @mui/icons-material)
+- ✅ Ensures essential utilities (axios, react-markdown)
+- ✅ Installs PDF generation tools (jspdf, html2canvas)
+- ✅ Verifies development dependencies (concurrently, web-vitals)
+- ✅ Runs security audit and applies fixes
+- ✅ Resolves common frontend compilation errors
+- ✅ Safe to run multiple times
+- ✅ Comprehensive dependency verification
 
 ### `python run.py diagnose` - System Health Check
 - ✅ Checks Python/Node.js versions
@@ -164,6 +183,20 @@ Add to `package.json`:
 
 ### Common Issues & Solutions
 
+**Frontend CSS/PostCSS Errors**
+```bash
+python run.py repair      # Fix missing CSS dependencies
+# Resolves: "Cannot find module '@csstools/normalize.css'"
+#          "Loading PostCSS 'postcss-normalize' plugin failed"
+```
+
+**Server Already Running**
+```bash
+python run.py start   # Will detect and use existing servers
+# Shows: "✓ Backend already running on port 8000"
+#        "✓ Frontend already running on port 3000"
+```
+
 **Port Already in Use**
 ```bash
 python run.py stop    # Stop all servers first
@@ -199,6 +232,32 @@ python run.py diagnose    # Verify configuration
 ### Node.js Requirements  
 - Node.js 16+
 - npm packages in `presales-assistant-ui/package.json`
+
+### Critical Frontend Dependencies
+The system automatically ensures these key dependencies are installed:
+
+**CSS & Styling:**
+- `@csstools/normalize.css` - CSS normalization
+- `postcss-normalize` - PostCSS plugin for normalize.css
+
+**UI Framework:**
+- `@mui/material` - Material-UI components
+- `@mui/icons-material` - Material-UI icons
+- `@emotion/react` + `@emotion/styled` - CSS-in-JS styling
+
+**Core Utilities:**
+- `axios` - HTTP client for API calls
+- `react-markdown` - Markdown rendering
+- `jspdf` + `html2canvas` - PDF generation
+
+**Development Tools:**
+- `concurrently` - Run multiple commands
+- `web-vitals` - Performance monitoring
+
+### Dependency Files
+- `requirements.txt` - Python backend dependencies
+- `presales-assistant-ui/package.json` - Frontend dependencies
+- `presales-assistant-ui/package-requirements.txt` - Reference list
 
 ## 🚀 Deployment Ready
 

@@ -9,6 +9,7 @@
     "restart": "python run.py restart",
     "status": "python run.py status",
     "diagnose": "python run.py diagnose",
+    "repair": "python run.py repair",
     "dev": "python run.py start",
     "backend": "python ff.py",
     "frontend": "cd presales-assistant-ui && npm start",
