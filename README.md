@@ -56,7 +56,7 @@ An intelligent presales automation tool that revolutionizes how sales teams crea
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/presales_assistant.git
+git clone https://github.com/Smuthiki/presales_assistant.git
 cd presales_assistant
 
 # Create and activate virtual environment
