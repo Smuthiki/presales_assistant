@@ -59,12 +59,7 @@ An intelligent presales automation tool that revolutionizes how sales teams crea
 git clone https://github.com/Smuthiki/presales_assistant.git
 cd presales_assistant
 
-# Create and activate virtual environment
-python -m venv venv
-venv\Scripts\activate  # Windows
-# source venv/bin/activate  # Linux/Mac
-
-# Install Python dependencies
+# Install Python dependencies globally
 pip install -r requirements.txt
 
 # Set your OpenAI API key
@@ -85,9 +80,6 @@ npm install
 
 ### Start Backend Server (Terminal 1)
 ```bash
-# Activate virtual environment
-venv\Scripts\activate
-
 # Start FastAPI server
 python ff.py
 ```
